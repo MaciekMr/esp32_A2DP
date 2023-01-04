@@ -1,0 +1,95 @@
+menu "A2DP Example Configuration"
+
+    choice A2DP_SINK_OUTPUT
+        prompt "A2DP Sink Output"
+        default A2DP_SINK_OUTPUT_EXTERNAL_I2S
+        help
+            Select to use Internal DAC or external I2S driver
+
+        config A2DP_SINK_OUTPUT_INTERNAL_DAC
+            bool "Internal DAC"
+            help
+                Select this to use Internal DAC sink output,
+                note that DAC_DMA_AUTO_16BIT_ALIGN should be turned off
+                because the audio data are already 16-bit width
+
+        config A2DP_SINK_OUTPUT_EXTERNAL_I2S
+            bool "External I2S Codec"
+            help
+                Select this to use External I2S sink output
+
+    endchoice
+
+    config I2S_LRCK_PIN
+        int "I2S LRCK (WS) GPIO"
+        default 22
+        depends on A2DP_SINK_OUTPUT_EXTERNAL_I2S
+        help
+            GPIO number to use for I2S LRCK(WS) Driver.
+
+    config I2S_BCK_PIN
+        int "I2S BCK GPIO"
+        default 26
+        depends on A2DP_SINK_OUTPUT_EXTERNAL_I2S
+        help
+            GPIO number to use for I2S BCK Driver.
+
+    config I2S_DATA_PIN
+        int "I2S DATA GPIO"
+        default 25
+        depends on A2DP_SINK_OUTPUT_EXTERNAL_I2S
+        help
+            GPIO number to use for I2S Data Driver.
+
+endmenu
+
+menu "External LCD Configuration"
+
+    choice LCD_INTERFACE
+        prompt "LCD interface"
+        default LCD_I2C_OUTPUT
+        help
+            Select to use Internal DAC or external I2S driver
+
+        config LCD_I2C_OUTPUT
+            bool "I2C interface"
+            help
+                Select this to I2C interface to connect to LCD
+
+        config LCD_SPI_OUTPUT
+            bool "SPI interface"
+            help
+                Select this to use SPI LCD interface
+
+    endchoice
+
+    config I2C_SDA_PIN
+        int "I2C SDA GPIO"
+        default 22
+        depends on LCD_I2C_OUTPUT
+        help
+            GPIO number to use I2C SDA.
+
+    config I2C_SCL_PIN
+        int "I2C SCL GPIO"
+        default 26
+        depends on LCD_I2C_OUTPUT
+        help
+            GPIO number to use I2C SCL.
+    config I2C_FREQ
+        int "I2C bus frequency"
+        default 100000
+        depends on LCD_I2C_OUTPUT
+        help
+            GBus speed in Hz.
+
+endmenu
+
+menu "QUEUE_CONFIGURATION"
+    
+    config QUEUE_LENGTH
+        int "QUEUE SIZE"
+        default 10
+        help
+            Set the queue size to properly handle all events.
+endmenu
